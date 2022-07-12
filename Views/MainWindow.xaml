@@ -17,7 +17,7 @@
     mc:Ignorable="d">
 
     <Window.DataContext>
-        <vm:MainWindowViewModel />
+        <vm:MainWindowViewModel/>
     </Window.DataContext>
 
     <Border Padding="10">
@@ -44,16 +44,18 @@
                 FontSize="18"
                 Text="To:" />
 
-            <!--<syncfusion:SfTextBoxExt
-                Grid.Row="1"
+            <syncfusion:SfTextBoxExt
                 Grid.Column="1"
+                Grid.Row="1"
                 VerticalAlignment="Center"
-                AutoCompleteSource="{Binding AirportsList}"
-                HighlightedTextColor="Red"
-                SearchItemPath="city"
-                SelectedItem="{Binding SelectedItem}"
                 ShowDropDownButton="True"
-                TextHighlightMode="FirstOccurrence">
+                SearchItemPath="city"
+                AutoCompleteMode="Suggest"
+                SelectedItem="{Binding SelectedItem}"              
+                HighlightedTextColor="Red"
+                TextHighlightMode="FirstOccurrence"
+                AutoCompleteSource="{Binding AirportsList}"
+                >
 
                 <syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
                     <DataTemplate>
@@ -63,15 +65,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-            </syncfusion:SfTextBoxExt>-->
-
-            <TextBox Grid.Column="1" Text="{Binding airport.births}" />
-
-            <Button
-                Grid.Row="1"
-                Grid.Column="1"
-                Command="{Binding pp}"
-                Content="Click" />
+            </syncfusion:SfTextBoxExt>
 
 
         </Grid>

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-
-using MvvmHelpers;
-using MvvmHelpers.Commands;
+﻿using System.Collections.ObjectModel;
 
 using PropertyChanged;
 
@@ -12,23 +8,19 @@ using Travel.Services;
 namespace Travel.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
-public class MainWindowViewModel 
+public class MainWindowViewModel
 {
-    public Command pp
-    {
-        get; set;
-    }
     public AirportServices Services
     {
         get; set;
     }
 
-    public List<Airport> AirportsList
+    public ObservableCollection<Airport> AirportsList
     {
         get; set;
     }
 
-    public Airport? airport
+    public Airport? SelectedItem
     {
         get; set;
     }
@@ -37,36 +29,15 @@ public class MainWindowViewModel
     {
         Services = new AirportServices();
 
-        AirportsList = new List<Airport>();
+        AirportsList = new ObservableCollection<Airport>();
 
         GetAirportList();
 
-        airport = new Airport();
-
-        pp = new Command(DoSomething,CanDoIT);
-    }
-
-    private bool CanDoIT(object arg)
-    {
-        if (!string.IsNullOrEmpty(airport.births))
-        {
-            return true;
-        }
-
-        return false;
-    }
-    private void DoSomething(object obj)
-    {
-        MessageBox.Show("dwdew");
     }
 
     private async void GetAirportList()
     {
-        var tempList = await Services.GetAirportsAsync();
+        var oo = await Services.GetAirportsAsync("https://gist.githubusercontent.com/tdreyno/4278655/raw/7b0762c09b519f40397e4c3e100b097d861f5588/airports.json");
 
-        foreach (var item in tempList)
-        {
-            AirportsList.Add(item);
-        }
     }
 }

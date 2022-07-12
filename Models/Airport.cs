@@ -1,4 +1,5 @@
-﻿using PropertyChanged;
+﻿
+using PropertyChanged;
 
 namespace Travel.Models;
 
@@ -78,17 +79,9 @@ public class Airport
         get; set;
     }
 
-    private string? _flag;
-
-    public string flag
-    {
-        get => $"https://countryflagsapi.com/png/{country?.Replace(" ","%20")}";
-        set => _flag = value;
-    }
-
-    public string births
+    public string? ISO2
     {
         get; set;
     }
-
+    public string flag => $"https://countryflagsapi.com/png/{country?.Replace(" ","%20")}";
 }
