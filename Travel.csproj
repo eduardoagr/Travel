@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+    <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.Themes.FluentDark.WPF" Version="20.2.0.36" />
+  </ItemGroup>
+
+</Project>
