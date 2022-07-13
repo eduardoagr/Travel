@@ -32,16 +32,19 @@ public class MainWindowViewModel
         AirportsList = new ObservableCollection<Airport>();
 
         GetAirportList();
-
     }
 
     private async void GetAirportList()
     {
         var temppList = await Services.GetAirportsAsync("https://gist.githubusercontent.com/tdreyno/4278655/raw/7b0762c09b519f40397e4c3e100b097d861f5588/airports.json");
 
+        var airports = new ObservableCollection<Airport>();
         foreach (var item in temppList!)
         {
-            AirportsList.Add(item);
+            airports.Add(item);
         }
+
+        AirportsList = airports;
+
     }
 }

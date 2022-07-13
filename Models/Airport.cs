@@ -18,7 +18,7 @@ public class Airport
     {
         get; set;
     }
-    public string? name
+    public string? name           
     {
         get; set;
     }

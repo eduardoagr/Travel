@@ -1,21 +1,17 @@
 ﻿
 using Syncfusion.Windows.Shared;
 
-namespace Travel
+namespace Travel;
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : ChromelessWindow
 {
-
-
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : ChromelessWindow
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            //using var client = new WebClient();
-            //client.DownloadString("http://ifconfig.me");
-        }
+        //using var client = new WebClient();
+        //client.DownloadString("http://ifconfig.me");
     }
 }

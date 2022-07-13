@@ -66,8 +66,6 @@
                     </DataTemplate>
                 </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
             </syncfusion:SfTextBoxExt>
-
-
         </Grid>
     </Border>
 
