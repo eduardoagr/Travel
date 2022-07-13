@@ -79,9 +79,26 @@ public class Airport
         get; set;
     }
 
+    //New properties
     public string? ISO2
     {
         get; set;
     }
-    public string flag => $"https://countryflagsapi.com/png/{country?.Replace(" ","%20")}";
+
+    public string? continent
+    {
+        get; set;
+    }
+
+    public string? currency
+    {
+        get; set;
+    }
+
+    public string? languages
+    {
+        get; set;
+    }
+    //End of a new properties
+    public string flag => $"https://countryflagsapi.com/svg/{ISO2}";
 }

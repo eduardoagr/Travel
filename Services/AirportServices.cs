@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using Travel.Models;
@@ -18,7 +20,7 @@ public class AirportServices
     }
 
     List<Airport>? airports = new();
-    public async Task<List<Airport>> GetAirportsAsync(string url)
+    public async Task<List<Airport>?> GetAirportsAsync(string url)
     {
         if (airports?.Count > 0)
         {
@@ -32,22 +34,32 @@ public class AirportServices
 
             foreach (var item in airports!)
             {
-                item.ISO2 = await GetCountryCodeAsync($"https://countrycode.dev/api/countries/{item.country}");
+                item.ISO2 = await GetCountryCodeAsync($"https://countrycode.dev/api/countries/{item.country?.Replace(" ","%20")}");
             }
 
+            Debug.Write(airports.Count);
+
+            return airports;
         }
 
         return null;
     }
 
-    public async Task<string> GetCountryCodeAsync(string url)
+    public async Task<string?> GetCountryCodeAsync(string url)
     {
         var response = await Client.GetAsync(url);
         if (response.IsSuccessStatusCode)
         {
-            var data = await response.Content.ReadAsStringAsync();
-            var obj = JObject.Parse(data);
-            var code = obj["ISO2"];
+            var json = await response.Content.ReadAsStringAsync();
+
+            var array = JsonConvert.DeserializeObject<JArray>(json);
+
+            foreach (JObject item in array!)
+            {
+                return item["ISO2"]?.ToString();
+
+            }
+
         }
 
         return null;
