@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 
-using MvvmHelpers;
 using MvvmHelpers.Commands;
 
 using PropertyChanged;
@@ -12,7 +11,7 @@ using Travel.Services;
 namespace Travel.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
-public class MainWindowViewModel : BaseViewModel
+public class MainWindowViewModel
 {
     public Command MyProperty
     {
