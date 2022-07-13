@@ -1,4 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
+
+using MvvmHelpers;
+using MvvmHelpers.Commands;
 
 using PropertyChanged;
 
@@ -8,8 +12,12 @@ using Travel.Services;
 namespace Travel.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
-public class MainWindowViewModel
+public class MainWindowViewModel : BaseViewModel
 {
+    public Command MyProperty
+    {
+        get; set;
+    }
     public AirportServices Services
     {
         get; set;
@@ -27,11 +35,26 @@ public class MainWindowViewModel
 
     public MainWindowViewModel()
     {
+        SelectedItem = new Airport
+        {
+            OnAnyPropertiesChanged = () => { MyProperty?.RaiseCanExecuteChanged(); }
+        };
         Services = new AirportServices();
 
         AirportsList = new ObservableCollection<Airport>();
 
+        MyProperty = new Command(Do,CanDo);
+
         GetAirportList();
+    }
+
+    private bool CanDo(object arg)
+    {
+        return SelectedItem != null && !string.IsNullOrEmpty(SelectedItem.name);
+    }
+    private void Do(object obj)
+    {
+        MessageBox.Show("sdc");
     }
 
     private async void GetAirportList()

@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 using PropertyChanged;
 
 namespace Travel.Models;
@@ -18,7 +20,9 @@ public class Airport
     {
         get; set;
     }
-    public string? name           
+
+    [OnChangedMethod(nameof(OnChange))]
+    public string? name
     {
         get; set;
     }
@@ -101,4 +105,12 @@ public class Airport
     }
     //End of a new properties
     public string flag => $"https://countryflagsapi.com/svg/{ISO2}";
+
+    public Action? OnAnyPropertiesChanged
+    {
+        get; set;
+    }
+
+    private void OnChange() => OnAnyPropertiesChanged?.Invoke();
+
 }

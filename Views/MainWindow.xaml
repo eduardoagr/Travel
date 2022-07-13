@@ -44,7 +44,7 @@
                 FontSize="18"
                 Text="To:" />
 
-            <syncfusion:SfTextBoxExt
+            <!--<syncfusion:SfTextBoxExt
                 Grid.Column="1"
                 Grid.Row="1"
                 VerticalAlignment="Center"
@@ -65,7 +65,12 @@
                         </StackPanel>
                     </DataTemplate>
                 </syncfusion:SfTextBoxExt.AutoCompleteItemTemplate>
-            </syncfusion:SfTextBoxExt>
+            </syncfusion:SfTextBoxExt>-->
+
+            <TextBox Grid.Column="1" Text="{Binding SelectedItem.name}"/>
+
+            <Button Grid.Column="1" Grid.Row="2" Command="{Binding MyProperty}"/>
+
         </Grid>
     </Border>
 
