@@ -106,7 +106,7 @@ public class Airport
     //End of a new properties
     public string flag => $"https://countryflagsapi.com/svg/{ISO2}";
 
-    public Action OnAnyPropertiesChanged
+    public Action? OnAnyPropertiesChanged
     {
         get; set;
     }
