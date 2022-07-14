@@ -32,6 +32,11 @@ public class MainWindowViewModel
         get; set;
     }
 
+    public string? text
+    {
+        get; set;
+    }
+
     public MainWindowViewModel()
     {
         SelectedItem = new Airport
@@ -49,7 +54,15 @@ public class MainWindowViewModel
 
     private bool CanDo(object arg)
     {
-        return SelectedItem != null && !string.IsNullOrEmpty(SelectedItem.name);
+        if (SelectedItem != null && !string.IsNullOrEmpty(SelectedItem.name))
+        {
+            text = "Enabled";
+
+            return true;
+        }
+
+        text = "Disable";
+        return false;
     }
     private void Do(object obj)
     {
@@ -58,7 +71,7 @@ public class MainWindowViewModel
 
     private async void GetAirportList()
     {
-        var temppList = await Services.GetAirportsAsync("https://gist.githubusercontent.com/tdreyno/4278655/raw/7b0762c09b519f40397e4c3e100b097d861f5588/airports.json");
+        var temppList = await Services.GetAirportsAsync();
 
         var airports = new ObservableCollection<Airport>();
         foreach (var item in temppList!)
