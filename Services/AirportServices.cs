@@ -29,7 +29,8 @@ public class AirportServices
 
             foreach (var item in airports!)
             {
-               item.ISO2 = await GetCountryCodeAsync($"https://countrycode.dev/api/countries/{item.country?.Replace(" ","%20")}");
+                //call the api, to populate the country  code
+                item.ISO2 = await GetCountryCodeAsync($"https://countrycode.dev/api/countries/{item.country?.Replace(" ","%20")}");
             }
         }
 
