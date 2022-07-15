@@ -19,8 +19,7 @@ public class AirportServices
         Client = new HttpClient();
     }
 
-    readonly List<Airport>? airportFat = new();
-    List<Airport>? airports = new();
+     List<Airport>? airports = new();
     public async Task<List<Airport>?> GetAirportsAsync()
     {
         var AirportRresponse = await Client.GetAsync(AIRPORTS_API);
@@ -30,14 +29,12 @@ public class AirportServices
 
             foreach (var item in airports!)
             {
-                var i = item;
                 //call the api, to populate the country  code
-                i.ISO2 = await GetCountryCodeAsync($"https://countrycode.dev/api/countries/{item.country?.Replace(" ","%20")}");
-                airportFat?.Add(i);
+                item.ISO2 = await GetCountryCodeAsync($"https://countrycode.dev/api/countries/{item.country?.Replace(" ","%20")}");
             }
         }
 
-        return airportFat;
+        return airports;
     }
 
     public async Task<string?> GetCountryCodeAsync(string url)
