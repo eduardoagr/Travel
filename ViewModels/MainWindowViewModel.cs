@@ -82,4 +82,5 @@ public class MainWindowViewModel
         AirportsList = airports;
 
     }
+
 }

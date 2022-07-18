@@ -19,40 +19,38 @@ public class AirportServices
         Client = new HttpClient();
     }
 
-     List<Airport>? airports = new();
+    List<Airport>? airports = new();
     public async Task<List<Airport>?> GetAirportsAsync()
     {
-        var AirportRresponse = await Client.GetAsync(AIRPORTS_API);
-        if (AirportRresponse.IsSuccessStatusCode)
+        var res = await Client.GetAsync(AIRPORTS_API);
+        if (res.IsSuccessStatusCode)
         {
-            airports = await AirportRresponse.Content.ReadFromJsonAsync<List<Airport>>();
+            airports = await res.Content.ReadFromJsonAsync<List<Airport>>();
 
-            foreach (var item in airports!)
+            for (var i = 0; i < airports?.Count; i++)
             {
-                //call the api, to populate the country  code
-                item.ISO2 = await GetCountryCodeAsync($"https://countrycode.dev/api/countries/{item.country?.Replace(" ","%20")}");
+                using (var client = new HttpClient())
+                {
+                    var result = await client.GetAsync
+                        ($"https://countrycode.dev/api/countries/{airports[i]
+                        .country?.Replace(" ","%20")}");
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var response = await result.Content.ReadAsStringAsync();
+                        var json = JsonConvert.DeserializeObject<JArray>(response);
+
+                        foreach (JObject item in json!)
+                        {
+                            airports[i].ISO2 = item["ISO2"]?.ToString();
+
+                        }
+                    }
+                }
+
+                return airports;
             }
         }
-
-        return airports;
-    }
-
-    public async Task<string?> GetCountryCodeAsync(string url)
-    {
-        var response = await Client.GetAsync(url);
-        if (response.IsSuccessStatusCode)
-        {
-            var json = await response.Content.ReadAsStringAsync();
-
-            var array = JsonConvert.DeserializeObject<JArray>(json);
-
-            foreach (JObject item in array!)
-            {
-                return item["ISO2"]?.ToString();
-
-            }
-        }
-
         return null;
     }
 }
