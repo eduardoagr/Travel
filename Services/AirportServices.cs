@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -26,27 +27,62 @@ public class AirportServices
         {
             airports = await res.Content.ReadFromJsonAsync<List<Airport>>();
 
+            Dictionary<string, HttpResponseMessage> countryInfoCache = new Dictionary<string, HttpResponseMessage>();
+
+            int requestCount = 0;
+
             for (var i = 0; i < airports?.Count; i++)
             {
                 using var client = new HttpClient();
 
-                var result = await client.GetAsync
-                    ($"https://countrycode.dev/api/countries/{airports[i]
-                    .country?.Replace(" ","%20")}");
+                if (airports[i].country == null) continue;
 
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    var response = await result.Content.ReadAsStringAsync();
-
-                    var array = JArray.Parse(response);
-                    foreach (var keyValues in array.Children<JObject>())
+                    HttpResponseMessage result;
+                    if (countryInfoCache.ContainsKey(airports[i].country))
                     {
-                        foreach (var singleProp in keyValues.Properties())
+                        result = countryInfoCache[airports[i].country];
+                    }
+                    else
+                    {
+                        result = await client.GetAsync
+                            ($"https://countrycode.dev/api/countries/{airports[i]
+                            .country?.Replace(" ", "%20")}");
+
+                        countryInfoCache[airports[i].country] = result;
+
+                        requestCount++;
+                    }
+
+                    if (requestCount >= 40)
+                    {
+                        Console.Write("Reached 40, waiting for 1 second");
+                        await Task.Delay(1000);
+                        requestCount = 0;
+                    }
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var response = await result.Content.ReadAsStringAsync();
+
+                        var countriesArray = JArray.Parse(response);
+
+                        if (countriesArray.Count > 0 && countriesArray[0]["country_name"]?.Value<string>() == airports[i].country)
                         {
-                            airports[i].ISO2 = singleProp["ISO2"]?.ToString();
+                            airports[i].ISO2 = countriesArray[0]["ISO2"]?.ToString();
                         }
                     }
+                    else
+                    {
+                        Console.Write("Error: " + result.ToString());
+                    }
                 }
+                catch(Exception e)
+                {
+                    Console.Write("Exception: " + e.ToString());
+                }
+
             }
             return airports;
         }
