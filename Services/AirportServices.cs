@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json.Linq;
 
 using Travel.Models;
 
@@ -26,31 +26,17 @@ public class AirportServices
         {
             airports = await res.Content.ReadFromJsonAsync<List<Airport>>();
 
-            for (var i = 0; i < airports?.Count; i++)
+            foreach (var item in airports!)
             {
-                using var client = new HttpClient();
-
-                var result = await client.GetAsync
-                    ($"https://countrycode.dev/api/countries/{airports[i]
-                    .country?.Replace(" ","%20")}");
-
-                if (result.IsSuccessStatusCode)
-                {
-                    var response = await result.Content.ReadAsStringAsync();
-
-                    var array = JArray.Parse(response);
-                    foreach (var keyValues in array.Children<JObject>())
-                    {
-                        foreach (var singleProp in keyValues.Properties())
-                        {
-                            airports[i].ISO2 = singleProp["ISO2"]?.ToString();
-                        }
-                    }
-                }
+                var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(x => new RegionInfo(x.LCID));
+                var englishRegion = regions.FirstOrDefault(region => region.EnglishName.Contains(item.country!));
+                var countryAbbrev = englishRegion?.TwoLetterISORegionName;
+                item.ISO2 = countryAbbrev;
             }
-            return airports;
         }
-        return null;
+        return airports;
     }
+
+
 }
 
