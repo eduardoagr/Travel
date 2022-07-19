@@ -71,7 +71,15 @@ public class MainWindowViewModel
 
     private async void GetAirportList()
     {
-        Services.GetAirportsAsync(); // I do not see any data
+        var temppList = await Services.GetAirportsAsync(); // I do not see any data
+
+        var airports = new ObservableCollection<Airport>();
+        foreach (var item in temppList!)
+        {
+            airports.Add(item);
+        }
+
+        AirportsList = airports;
 
     }
 
