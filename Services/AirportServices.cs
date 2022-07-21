@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 using Travel.Models;
 
@@ -18,37 +20,42 @@ public class AirportServices
         Client = new HttpClient();
     }
 
-    List<Airport>? airports = new();
     public async Task<List<Airport>?> GetAirportsAsync()
     {
+        List<Airport>? airports = new();
+
+        if (airports.Count > 0)
+        {
+            return airports;
+        }
+
         var res = await Client.GetAsync(AIRPORTS_API);
         if (res.IsSuccessStatusCode)
         {
             airports = await res.Content.ReadFromJsonAsync<List<Airport>>();
 
-            for (var i = 0; i < airports?.Count; i++)
+            var countryData = GetDictionryFromJson();
+
+            foreach (var item in airports!)
             {
-                using var client = new HttpClient();
+                item.ISO2 = countryData?.FirstOrDefault(x => x.Value == item.country).Key;
 
-                var result = await client.GetAsync
-                    ($"https://countrycode.dev/api/countries/{airports[i]
-                    .country?.Replace(" ","%20")}");
-
-                if (result.IsSuccessStatusCode)
-                {
-                    var response = await result.Content.ReadAsStringAsync();
-
-                    var iso = string.Empty;
-                    var array = JArray.Parse(response);
-                    foreach (var CountryInfo in array.Children<JObject>())
-                    {
-                        airports[i].ISO2 = CountryInfo["ISO2"]!.ToString();
-                    }
-                }
             }
             return airports;
         }
         return null;
+    }
+
+    public Dictionary<string,string>? GetDictionryFromJson()
+    {
+        var startupPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.
+            Parent?.FullName!,"CountryCodes.json");
+
+        var data = File.ReadAllText(startupPath);
+
+        var countryData = JsonConvert.DeserializeObject<Dictionary<string,string>>(data);
+
+        return countryData;
     }
 }
 

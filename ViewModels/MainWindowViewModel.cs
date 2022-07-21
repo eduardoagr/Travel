@@ -1,19 +1,19 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-
-using MvvmHelpers.Commands;
+﻿using System;
+using System.Collections.ObjectModel;
 
 using PropertyChanged;
 
 using Travel.Models;
 using Travel.Services;
 
+using Windows.Devices.Geolocation;
+
 namespace Travel.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
 public class MainWindowViewModel
 {
-    public Command MyProperty
+    public GeoServices GeoServices
     {
         get; set;
     }
@@ -32,55 +32,55 @@ public class MainWindowViewModel
         get; set;
     }
 
-    public string? text
+    public string? currentCity
     {
         get; set;
     }
 
     public MainWindowViewModel()
     {
-        SelectedItem = new Airport
-        {
-            OnAnyPropertiesChanged = () => { MyProperty?.RaiseCanExecuteChanged(); }
-        };
+        //SelectedItem = new Airport
+        //{
+        //    OnAnyPropertiesChanged = () => { MyProperty?.RaiseCanExecuteChanged(); }
+        //};
         Services = new AirportServices();
+
+        GeoServices = new GeoServices();
 
         AirportsList = new ObservableCollection<Airport>();
 
-        MyProperty = new Command(Do,CanDo);
-
         GetAirportList();
+
+        GetOrigin();
     }
-
-    private bool CanDo(object arg)
-    {
-        if (SelectedItem != null && !string.IsNullOrEmpty(SelectedItem.name))
-        {
-            text = "Enabled";
-
-            return true;
-        }
-
-        text = "Disable";
-        return false;
-    }
-    private void Do(object obj)
-    {
-        MessageBox.Show("sdc");
-    }
-
     private async void GetAirportList()
     {
-        var temppList = await Services.GetAirportsAsync(); // I do not see any data
+        var temppList = await Services.GetAirportsAsync();
 
-        var airports = new ObservableCollection<Airport>();
+        var teplObservable = new ObservableCollection<Airport>();
         foreach (var item in temppList!)
         {
-            airports.Add(item);
+            teplObservable.Add(item);
         }
 
-        AirportsList = airports;
+        AirportsList = teplObservable;
 
     }
 
+    private async void GetOrigin()
+    {
+        var accessStatus = await Geolocator.RequestAccessAsync();
+
+        if (accessStatus == GeolocationAccessStatus.Allowed)
+        {
+            var locator = new Geolocator();
+
+            var pos = await locator.GetGeopositionAsync();
+
+            var userCity = await GeoServices.GetLocation(pos.Coordinate.Latitude,pos.Coordinate.Longitude);
+
+            currentCity = userCity?.address?.city;
+
+        }
+    }
 }

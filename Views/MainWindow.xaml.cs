@@ -11,7 +11,5 @@ public partial class MainWindow : ChromelessWindow
     {
         InitializeComponent();
 
-        //using var client = new WebClient();
-        //client.DownloadString("http://ifconfig.me");
     }
 }

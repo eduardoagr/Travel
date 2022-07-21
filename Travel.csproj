@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -20,9 +20,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" PrivateAssets="All" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="20.2.0.38" />
-    <PackageReference Include="Syncfusion.Shared.WPF" Version="20.2.0.38" />
-    <PackageReference Include="Syncfusion.Themes.FluentDark.WPF" Version="20.2.0.38" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="20.2.0.39" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="20.2.0.39" />
+    <PackageReference Include="Syncfusion.Themes.FluentDark.WPF" Version="20.2.0.39" />
   </ItemGroup>
 
 </Project>
