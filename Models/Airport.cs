@@ -83,27 +83,11 @@ public class Airport
         get; set;
     }
 
-    //New properties
     public string? ISO2
     {
         get; set;
     }
 
-    public string? continent
-    {
-        get; set;
-    }
-
-    public string? currency
-    {
-        get; set;
-    }
-
-    public string? languages
-    {
-        get; set;
-    }
-    //End of a new properties
     public string flag => $"https://countryflagsapi.com/png/{ISO2}";
 
     public Action? OnAnyPropertiesChanged

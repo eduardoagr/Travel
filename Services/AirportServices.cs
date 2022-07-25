@@ -34,24 +34,25 @@ public class AirportServices
         {
             airports = await res.Content.ReadFromJsonAsync<List<Airport>>();
 
-            var countryData = GetDictionryFromJson();
+            var countryData = GetCounryCodeLocalJson();
 
             foreach (var item in airports!)
             {
                 item.ISO2 = countryData?.FirstOrDefault(x => x.Value == item.country).Key;
-
             }
+
             return airports;
         }
         return null;
     }
 
-    public Dictionary<string,string>? GetDictionryFromJson()
+    public Dictionary<string,string>? GetCounryCodeLocalJson()
     {
         var startupPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.
             Parent?.FullName!,"CountryCodes.json");
 
         var data = File.ReadAllText(startupPath);
+
 
         var countryData = JsonConvert.DeserializeObject<Dictionary<string,string>>(data);
 

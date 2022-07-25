@@ -5,6 +5,7 @@ using PropertyChanged;
 
 using Travel.Models;
 using Travel.Services;
+using Travel.Views;
 
 using Windows.Devices.Geolocation;
 
@@ -27,12 +28,22 @@ public class MainWindowViewModel
         get; set;
     }
 
+
+    private Airport? _SelectedItem;
     public Airport? SelectedItem
     {
-        get; set;
+        get => _SelectedItem;
+        set
+        {
+            if (_SelectedItem != value)
+            {
+                _SelectedItem = value;
+                Details();
+            }
+        }
     }
 
-    public string? currentCity
+    public string? CurrentCity
     {
         get; set;
     }
@@ -57,13 +68,17 @@ public class MainWindowViewModel
     {
         var temppList = await Services.GetAirportsAsync();
 
-        var teplObservable = new ObservableCollection<Airport>();
+        var tempObservable = new ObservableCollection<Airport>();
         foreach (var item in temppList!)
         {
-            teplObservable.Add(item);
+            if (!tempObservable.Contains(item))
+            {
+                tempObservable.Add(item);
+            }
+
         }
 
-        AirportsList = teplObservable;
+        AirportsList = tempObservable;
 
     }
 
@@ -79,8 +94,18 @@ public class MainWindowViewModel
 
             var userCity = await GeoServices.GetLocation(pos.Coordinate.Latitude,pos.Coordinate.Longitude);
 
-            currentCity = userCity?.address?.city;
-
+            CurrentCity = userCity?.address?.city;
         }
+    }
+
+    private void Details()
+    {
+        if (string.IsNullOrEmpty(SelectedItem?.city)) { return; }
+
+        var CityDetailsWindow = new CittyDetailsWinow();
+        new CityDetailsViewModel(SelectedItem);
+
+        CityDetailsWindow.Show();
+
     }
 }
