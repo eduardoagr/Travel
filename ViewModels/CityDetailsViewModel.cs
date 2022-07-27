@@ -1,6 +1,4 @@
 ﻿
-using System.Windows;
-
 using PropertyChanged;
 
 using Travel.Models;
@@ -22,7 +20,5 @@ public class CityDetailsViewModel
     public CityDetailsViewModel(Airport airport)
     {
         SelectedItem = airport;
-
-        MessageBox.Show($"{SelectedItem.city}");
     }
 }

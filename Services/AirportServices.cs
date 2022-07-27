@@ -46,15 +46,15 @@ public class AirportServices
         return null;
     }
 
-    public Dictionary<string,string>? GetCounryCodeLocalJson()
+    public Dictionary<string, string>? GetCounryCodeLocalJson()
     {
         var startupPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.
-            Parent?.FullName!,"CountryCodes.json");
+            Parent?.FullName!, "CountryCodes.json");
 
         var data = File.ReadAllText(startupPath);
 
 
-        var countryData = JsonConvert.DeserializeObject<Dictionary<string,string>>(data);
+        var countryData = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
 
         return countryData;
     }

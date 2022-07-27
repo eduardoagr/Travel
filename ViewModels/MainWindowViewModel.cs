@@ -92,7 +92,7 @@ public class MainWindowViewModel
 
             var pos = await locator.GetGeopositionAsync();
 
-            var userCity = await GeoServices.GetLocation(pos.Coordinate.Latitude,pos.Coordinate.Longitude);
+            var userCity = await GeoServices.GetLocation(pos.Coordinate.Latitude, pos.Coordinate.Longitude);
 
             CurrentCity = userCity?.address?.city;
         }
@@ -102,10 +102,10 @@ public class MainWindowViewModel
     {
         if (string.IsNullOrEmpty(SelectedItem?.city)) { return; }
 
-        var CityDetailsWindow = new CittyDetailsWinow();
-        new CityDetailsViewModel(SelectedItem);
-
+        var CityDetailsWindow = new CityDetailsWinow
+        {
+            DataContext = new CityDetailsViewModel(SelectedItem)
+        };
         CityDetailsWindow.Show();
-
     }
 }

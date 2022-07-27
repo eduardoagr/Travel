@@ -5,9 +5,9 @@ namespace Travel.Views;
 /// <summary>
 /// Interaction logic for CittyDetailsWinow.xaml
 /// </summary>
-public partial class CittyDetailsWinow : ChromelessWindow
+public partial class CityDetailsWinow : ChromelessWindow
 {
-    public CittyDetailsWinow()
+    public CityDetailsWinow()
     {
         InitializeComponent();
     }
